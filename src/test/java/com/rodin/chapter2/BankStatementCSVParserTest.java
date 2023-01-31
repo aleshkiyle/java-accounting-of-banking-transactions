@@ -8,15 +8,20 @@ import java.time.LocalDate;
 import java.time.Month;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
-class BankStatementCSVParserTest {
+public class BankStatementCSVParserTest {
 
     private final BankStatementParser statementParser =
             new BankStatementCSVParser();
 
     @Test
+    public void correctTestLine() {
+        Assertions.assertTrue(true);
+    }
+    @Test
     public void shouldParseOneCorrectLine() {
-        final String line = "30-01-2023, 100,Salary";
+        final String line = "30-01-2023, 100, Salary";
 
         final BankTransaction result = statementParser.parseFrom(line);
 
@@ -28,4 +33,18 @@ class BankStatementCSVParserTest {
         assertEquals(expected.description(), result.description());
     }
 
+    @Test
+    public void shouldParseOneIncorrectLine() {
+        final String line = "30-01-2023, 100, Salary";
+
+        final BankTransaction resultParsing = this.statementParser.parseFrom(line);
+
+        final BankTransaction expected = new BankTransaction(
+                LocalDate.of(2023, Month.JANUARY, 29), 120, "Tesco"
+        );
+
+        assertNotEquals(expected.date(), resultParsing.date());
+        assertNotEquals(expected.amount(), resultParsing.amount());
+        assertNotEquals(expected.description(), resultParsing.description());
+    }
 }
