@@ -10,13 +10,11 @@ public class BankStatementAnalyzer {
 
     private static final String RESOURCES = "src/main/resources/bank-simple.csv";
 
-    private static final BankStatementCSVParser bankStatementCSVParser =
-            new BankStatementCSVParser();
 
-    public static void main(String[] args) throws IOException {
-        final Path path = Path.of(RESOURCES);
+    public void analyze(final String fileName, final BankStatementParser bankStatementParser) throws IOException {
+        final Path path = Path.of(fileName);
         final List<String> lines = Files.readAllLines(path);
-        final List<BankTransaction> bankTransactions = bankStatementCSVParser.parseLineFromCSVFile(lines);
+        final List<BankTransaction> bankTransactions = bankStatementParser.parseLineFrom(lines);
 
         final BankStatementProcessor bankStatementProcessor = new BankStatementProcessor(bankTransactions);
 
