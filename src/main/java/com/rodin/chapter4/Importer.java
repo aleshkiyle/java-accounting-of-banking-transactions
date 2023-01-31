@@ -1,4 +1,4 @@
-package com.rodin.chapter04;
+package com.rodin.chapter4;
 
 import java.io.File;
 import java.io.IOException;

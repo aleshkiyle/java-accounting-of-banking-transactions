@@ -1,4 +1,4 @@
-package com.rodin.chapter04;
+package com.rodin.chapter4;
 
 public final class Attributes {
 
