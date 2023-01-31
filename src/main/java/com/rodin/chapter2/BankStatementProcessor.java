@@ -1,5 +1,8 @@
 package com.rodin.chapter2;
 
+import com.rodin.chapter2.BankTransaction;
+import com.rodin.chapter3.BankTransactionFilter;
+
 import java.time.Month;
 import java.util.List;
 import java.util.Objects;
@@ -34,5 +37,31 @@ public class BankStatementProcessor {
                 .map(BankTransaction::amount)
                 .reduce(Double::sum)
                 .orElse(0d);
+    }
+
+    public List<BankTransaction> findTransactions(final BankTransactionFilter bankTransactionFilter) {
+        return this.bankTransactions.stream()
+                .filter(bankTransactionFilter::test)
+                .toList();
+    }
+    public List<BankTransaction> findTransactionsEqualsGreaterThenEqual(final double amount) {
+        return this.bankTransactions.stream()
+                .filter(bankTransaction -> bankTransaction.amount() > amount)
+                .toList();
+    }
+
+    public List<BankTransaction> findTransactionsInMonthO(final Month month) {
+        return this.bankTransactions.stream()
+                .filter(bankTransaction -> bankTransaction.date().getMonth() == month)
+                .toList();
+    }
+
+    public List<BankTransaction> findTransactionsInMonthAndGreater(
+            final Month mont, final double amount
+    ) {
+        return this.bankTransactions.stream()
+                .filter(bankTransaction -> bankTransaction.date().getMonth() == mont &&
+                        bankTransaction.amount() >= amount)
+                .toList();
     }
 }

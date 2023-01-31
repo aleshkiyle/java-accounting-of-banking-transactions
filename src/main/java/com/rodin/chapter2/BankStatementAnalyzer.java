@@ -1,5 +1,7 @@
 package com.rodin.chapter2;
 
+import com.rodin.chapter3.BankTransactionIsFebruaryAndExpensive;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -14,6 +16,8 @@ public class BankStatementAnalyzer {
         final List<BankTransaction> bankTransactions = bankStatementParser.parseLineFrom(lines);
 
         final BankStatementProcessor bankStatementProcessor = new BankStatementProcessor(bankTransactions);
+
+       final List<BankTransaction> transactions = bankStatementProcessor.findTransactions(new BankTransactionIsFebruaryAndExpensive());
 
         collectSummary(bankStatementProcessor);
     }
