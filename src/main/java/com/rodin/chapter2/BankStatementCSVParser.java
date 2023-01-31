@@ -10,8 +10,10 @@ public class BankStatementCSVParser {
     private static final DateTimeFormatter DATE_PATTERN =
             DateTimeFormatter.ofPattern("dd-MM-yyyy");
 
+    private static final String SPLITERATOR = ",";
+
     private BankTransaction parseFromCSV(final String line) {
-        final String[] columns = line.split(",");
+        final String[] columns = line.split(SPLITERATOR);
 
         final LocalDate date = LocalDate.parse(columns[0], DATE_PATTERN);
         final double amount = Double.parseDouble(columns[1]);
