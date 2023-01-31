@@ -2,6 +2,7 @@ package com.rodin.chapter2;
 
 import java.time.Month;
 import java.util.List;
+import java.util.Objects;
 
 public class BankStatementProcessor {
 
@@ -29,7 +30,7 @@ public class BankStatementProcessor {
 
     public double calculateTotalForCategory(final String category) {
         return bankTransactions.stream()
-                .filter(bankTransaction -> bankTransaction.description() == category)
+                .filter(bankTransaction -> Objects.equals(bankTransaction.description(), category))
                 .map(BankTransaction::amount)
                 .reduce(Double::sum)
                 .orElse(0d);
