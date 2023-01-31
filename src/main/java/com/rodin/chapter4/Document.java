@@ -5,10 +5,6 @@ import lombok.Getter;
 
 import java.util.Map;
 
-@AllArgsConstructor
-@Getter
-public class Document {
-
-    private final Map<String, String> attributes;
+public record Document(Map<String, String> attributes) {
 
 }
