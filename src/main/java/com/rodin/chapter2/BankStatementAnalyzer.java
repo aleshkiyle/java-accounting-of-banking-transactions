@@ -8,9 +8,6 @@ import java.util.List;
 
 public class BankStatementAnalyzer {
 
-    private static final String RESOURCES = "src/main/resources/bank-simple.csv";
-
-
     public void analyze(final String fileName, final BankStatementParser bankStatementParser) throws IOException {
         final Path path = Path.of(fileName);
         final List<String> lines = Files.readAllLines(path);
