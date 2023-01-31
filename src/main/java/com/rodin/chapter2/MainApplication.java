@@ -1,5 +1,8 @@
 package com.rodin.chapter2;
 
+import com.rodin.chapter3.Exporter;
+import com.rodin.chapter3.HtmlExporter;
+
 import java.io.IOException;
 
 public class MainApplication {
@@ -12,6 +15,8 @@ public class MainApplication {
 
         final BankStatementAnalyzer bankStatementAnalyzer = new BankStatementAnalyzer();
 
-        bankStatementAnalyzer.analyze(CSV_SOURCE, bankStatementCSVParser);
+        final Exporter exporter = new HtmlExporter();
+
+        bankStatementAnalyzer.analyze(CSV_SOURCE, bankStatementCSVParser, exporter);
     }
 }

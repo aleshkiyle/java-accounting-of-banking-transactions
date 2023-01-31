@@ -1,9 +1,11 @@
 package com.rodin.chapter2;
 
-import com.rodin.chapter2.BankTransaction;
 import com.rodin.chapter3.BankTransactionFilter;
+import com.rodin.chapter3.BankTransactionSummarizer;
+import com.rodin.chapter3.SummaryStatistics;
 
 import java.time.Month;
+import java.util.DoubleSummaryStatistics;
 import java.util.List;
 import java.util.Objects;
 
@@ -16,27 +18,38 @@ public class BankStatementProcessor {
         this.bankTransactions = bankTransactions;
     }
 
-    public double calculateTotalAmount() {
-        return bankTransactions.stream()
-                .map(BankTransaction::amount)
-                .reduce(Double::sum)
-                .orElse(0d);
+    public SummaryStatistics summarizeTransactions() {
+        final DoubleSummaryStatistics doubleSummaryStatistics =
+                bankTransactions.stream()
+                        .mapToDouble(BankTransaction::amount)
+                        .summaryStatistics();
+
+        return new SummaryStatistics(
+                doubleSummaryStatistics.getSum(),
+                doubleSummaryStatistics.getMax(),
+                doubleSummaryStatistics.getMin(),
+                doubleSummaryStatistics.getAverage()
+        );
+    }
+
+    public double summarizeTransactions(final BankTransactionSummarizer bankTransactionSummarizer) {
+        double result = 0d;
+        for (final BankTransaction bankTransaction: bankTransactions) {
+            result = bankTransactionSummarizer.summarize(result, bankTransaction);
+        }
+        return result;
     }
 
     public double calculateTotalInMonth(final Month month) {
-        return bankTransactions.stream()
-                .filter(bankTransaction -> bankTransaction.date().getMonth() == month)
-                .map(BankTransaction::amount)
-                .reduce(Double::sum)
-                .orElse(0d);
+        return summarizeTransactions((accumulator, bankTransaction) ->
+                bankTransaction.date().getMonth() == month ? accumulator + bankTransaction.amount() :
+                        accumulator);
     }
 
     public double calculateTotalForCategory(final String category) {
-        return bankTransactions.stream()
-                .filter(bankTransaction -> Objects.equals(bankTransaction.description(), category))
-                .map(BankTransaction::amount)
-                .reduce(Double::sum)
-                .orElse(0d);
+        return summarizeTransactions((accumulator, bankTransaction) ->
+                Objects.equals(bankTransaction.description(), category) ? accumulator + bankTransaction.amount() :
+                        accumulator);
     }
 
     public List<BankTransaction> findTransactions(final BankTransactionFilter bankTransactionFilter) {
@@ -44,24 +57,19 @@ public class BankStatementProcessor {
                 .filter(bankTransactionFilter::test)
                 .toList();
     }
+
     public List<BankTransaction> findTransactionsEqualsGreaterThenEqual(final double amount) {
-        return this.bankTransactions.stream()
-                .filter(bankTransaction -> bankTransaction.amount() > amount)
-                .toList();
+        return findTransactions(bankTransaction -> bankTransaction.amount() >= amount);
     }
 
     public List<BankTransaction> findTransactionsInMonthO(final Month month) {
-        return this.bankTransactions.stream()
-                .filter(bankTransaction -> bankTransaction.date().getMonth() == month)
-                .toList();
+        return findTransactions(bankTransaction -> bankTransaction.date().getMonth() == month);
     }
 
     public List<BankTransaction> findTransactionsInMonthAndGreater(
-            final Month mont, final double amount
+            final Month month, final double amount
     ) {
-        return this.bankTransactions.stream()
-                .filter(bankTransaction -> bankTransaction.date().getMonth() == mont &&
-                        bankTransaction.amount() >= amount)
-                .toList();
+        return findTransactions(bankTransaction -> bankTransaction.date().getMonth() == month &&
+                bankTransaction.amount() >= amount);
     }
 }
