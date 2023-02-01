@@ -4,7 +4,7 @@ public class HtmlExporter implements Exporter {
 
     @Override
     public String export(SummaryStatistics summaryStatistics) {
-        String result = "<!doctype html>";
+        var result = "<!doctype html>";
         result += "<html lang='en'>";
         result += "<head><title>Bank Transaction Report</title></head>";
         result += "<body>";

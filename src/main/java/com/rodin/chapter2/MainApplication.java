@@ -11,11 +11,11 @@ public class MainApplication {
 
     public static void main(String[] args) throws IOException {
 
-        final BankStatementCSVParser bankStatementCSVParser = new BankStatementCSVParser();
+        final var bankStatementCSVParser = new BankStatementCSVParser();
 
-        final BankStatementAnalyzer bankStatementAnalyzer = new BankStatementAnalyzer();
+        final var bankStatementAnalyzer = new BankStatementAnalyzer();
 
-        final Exporter exporter = new HtmlExporter();
+        final var exporter = new HtmlExporter();
 
         bankStatementAnalyzer.analyze(CSV_SOURCE, bankStatementCSVParser, exporter);
     }
